@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  whisper-transcription:
+    build: .
+    ports:
+      - "8100:8100"
+    environment:
+      WHISPER_MODEL: ${WHISPER_MODEL:-small}
+      WHISPER_DEVICE: ${WHISPER_DEVICE:-auto}
+      WHISPER_COMPUTE_TYPE: ${WHISPER_COMPUTE_TYPE:-auto}
+      WHISPER_LANGUAGE: ${WHISPER_LANGUAGE:-pt}
+      WHISPER_WORD_TIMESTAMPS: ${WHISPER_WORD_TIMESTAMPS:-false}
+      TRANSCRIPTION_CONCURRENCY: ${TRANSCRIPTION_CONCURRENCY:-1}
+      MAX_FILE_SIZE_MB: ${MAX_FILE_SIZE_MB:-300}
+      MAX_DURATION_SECONDS: ${MAX_DURATION_SECONDS:-1200}
+      WHISPER_SERVICE_TOKEN: ${WHISPER_SERVICE_TOKEN}
+    volumes:
+      # Cache do modelo — sobrevive a rebuilds, não baixa de novo toda hora.
+      - whisper-models:/models
+      - whisper-tmp:/tmp/whisper-jobs
+    restart: unless-stopped
+
+volumes:
+  whisper-models:
+  whisper-tmp:

@@ -1,0 +1,6 @@
+.venv
+models
+tmp-jobs
+.env
+__pycache__
+*.pyc
